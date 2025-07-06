@@ -6,11 +6,30 @@ import { useSamplesDrawerOpen } from '../../documents/editor/EditorContext';
 
 import SidebarButton from './SidebarButton';
 import logo from './waypoint.svg';
+import { useFrappeGetDocList } from 'frappe-react-sdk';
 
 export const SAMPLES_DRAWER_WIDTH = 240;
-
+interface EmailDesign {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  design_name: string;
+  subject: string;
+  email_template: string | null;
+  content: string;
+}
 export default function SamplesDrawer() {
   const samplesDrawerOpen = useSamplesDrawerOpen();
+
+  const email_designs_query = useFrappeGetDocList<EmailDesign>('Email Design', {
+    fields: ["*"],
+  });
+  console.log('email_designs_query', email_designs_query);
+  const email_designs = email_designs_query?.data || [];
 
   return (
     <Drawer
@@ -24,8 +43,24 @@ export default function SamplesDrawer() {
       <Stack spacing={3} py={1} px={2} width={SAMPLES_DRAWER_WIDTH} justifyContent="space-between" height="100%">
         <Stack spacing={2} sx={{ '& .MuiButtonBase-root': { width: '100%', justifyContent: 'flex-start' } }}>
           <Typography variant="h6" component="h1" sx={{ p: 0.75 }}>
-            EmailBuilder.js
+            Email Designer
           </Typography>
+
+          <Stack alignItems="flex-start">
+            {
+              email_designs.map((design, key) => {
+                return <SidebarButton key={key}
+
+                // href={`#design/${design.name}`}
+                href={`#design/${design.design_name}`}
+
+                >{design.name}</SidebarButton>
+              })
+            }
+
+
+          </Stack>
+
 
           <Stack alignItems="flex-start">
             <SidebarButton href="#">Empty</SidebarButton>

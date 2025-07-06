@@ -2,7 +2,7 @@ import React from 'react';
 
 import { MonitorOutlined, PhoneIphoneOutlined } from '@mui/icons-material';
 import { Box, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
-import { Reader } from '@usewaypoint/email-builder';
+import { Reader, renderToStaticMarkup } from '@usewaypoint/email-builder';
 import type { SxProps } from '@mui/material/styles';
 import EditorBlock from '../../documents/editor/EditorBlock';
 import {
@@ -25,6 +25,8 @@ export default function TemplatePanel() {
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
+  const html_code = React.useMemo(() => renderToStaticMarkup(document, { rootBlockId: 'root' }), [document]);
+  // console.log(document)
 
   let mainBoxSx: SxProps = {
     height: '100%',
@@ -94,6 +96,25 @@ export default function TemplatePanel() {
           <Stack direction="row" spacing={2}>
             <MainTabsGroup />
           </Stack>
+          <Box>
+            <button
+              style={{
+                padding: '6px 16px',
+                background: '#1976d2',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 4,
+                cursor: 'pointer',
+                fontWeight: 500,
+                fontSize: 14,
+              }}
+              onClick={() => {
+                console.log(html_code);
+              }}
+            >
+              Save
+            </button>
+          </Box>
           <Stack direction="row" spacing={2}>
             <DownloadJson />
             <ImportJson />

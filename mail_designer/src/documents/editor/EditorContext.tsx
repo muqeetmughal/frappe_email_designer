@@ -27,6 +27,7 @@ const editorStateStore = create<TValue>(() => ({
   samplesDrawerOpen: true,
 }));
 
+
 export function useDocument() {
   return editorStateStore((s) => s.document);
 }
@@ -81,6 +82,11 @@ export function resetDocument(document: TValue['document']) {
     document,
     selectedSidebarTab: 'styles',
     selectedBlockId: null,
+  });
+}
+export function changeDocument(document: TValue['document']) {
+  return editorStateStore.setState({
+    document:document
   });
 }
 
