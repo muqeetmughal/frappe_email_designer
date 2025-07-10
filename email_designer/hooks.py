@@ -242,5 +242,34 @@ app_license = "agpl-3.0"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            [
+                "dt",
+                "in",
+                [
+                    "Email Template",
+                ],
+            ],
+            ["fieldname", "=", "custom_design"],
+        ],
+    },
+    {
+        "dt": "Client Script",
+        "filters": [
+            [
+                "dt",
+                "in",
+                [
+                    "Email Template",
+                ],
+            ],
+        ],
+    },
+]
 
-website_route_rules = [{'from_route': '/mail_designer/<path:app_path>', 'to_route': 'mail_designer'},]
+website_route_rules = [
+    {"from_route": "/mail_designer/<path:app_path>", "to_route": "mail_designer"},
+]

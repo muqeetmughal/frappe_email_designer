@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Email Template",
+  "enabled": 1,
+  "modified": "2025-07-10 04:39:08.527414",
+  "module": "Email Designer",
+  "name": "Show Email Preview",
+  "script": "frappe.ui.form.on('Email Template', {\n  refresh(frm) {\n    insert_preview_container(frm);\n    update_preview(frm);\n  },\n  response_html(frm) {\n    update_preview(frm);\n  }\n});\n\n// Step 1: create once, above response_html field\nfunction insert_preview_container(frm) {\n  if (frm._preview_div) return;\n\n  // locate response_html wrapper\n  const resp_wrapper = frm.fields_dict.response_html.$wrapper;\n  const container = document.createElement('div');\n  container.id = 'email_preview_container';\n  Object.assign(container.style, {\n    padding: '12px',\n    border: '1px solid #ccc',\n    marginBottom: '8px',\n    borderRadius: '4px'\n  });\n\n  resp_wrapper[0].insertAdjacentElement('beforebegin', container);\n  frm._preview_div = container;\n}\n\n// Step 2: populate the preview\nfunction update_preview(frm) {\n  if (!frm._preview_div) return;\n\n  const html = frm.doc.response_html || frm.doc.response || '';\n  frm._preview_div.innerHTML = html;\n}\n",
+  "view": "Form"
+ }
+]

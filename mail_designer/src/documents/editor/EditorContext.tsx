@@ -99,7 +99,12 @@ export function setDocument(document: TValue['document']) {
     },
   });
 }
-
+export function updateDocument(document: TValue['document']) {
+  // const originalDocument = editorStateStore.getState().document;
+  return editorStateStore.setState({
+    document: document,
+  });
+}
 export function toggleInspectorDrawerOpen() {
   const inspectorDrawerOpen = !editorStateStore.getState().inspectorDrawerOpen;
   return editorStateStore.setState({ inspectorDrawerOpen });

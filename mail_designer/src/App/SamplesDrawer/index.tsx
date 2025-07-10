@@ -7,29 +7,17 @@ import { useSamplesDrawerOpen } from '../../documents/editor/EditorContext';
 import SidebarButton from './SidebarButton';
 import logo from './waypoint.svg';
 import { useFrappeGetDocList } from 'frappe-react-sdk';
+import type { EmailTemplate } from '../../types';
 
 export const SAMPLES_DRAWER_WIDTH = 240;
-interface EmailDesign {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  design_name: string;
-  subject: string;
-  email_template: string | null;
-  content: string;
-}
+
 export default function SamplesDrawer() {
   const samplesDrawerOpen = useSamplesDrawerOpen();
 
-  const email_designs_query = useFrappeGetDocList<EmailDesign>('Email Design', {
+  const email_templates_query = useFrappeGetDocList<EmailTemplate>('Email Template', {
     fields: ["*"],
   });
-  console.log('email_designs_query', email_designs_query);
-  const email_designs = email_designs_query?.data || [];
+  const email_designs = email_templates_query?.data || [];
 
   return (
     <Drawer
@@ -52,7 +40,7 @@ export default function SamplesDrawer() {
                 return <SidebarButton key={key}
 
                 // href={`#design/${design.name}`}
-                href={`#design/${design.design_name}`}
+                href={`#design/${design.name}`}
 
                 >{design.name}</SidebarButton>
               })
@@ -74,40 +62,10 @@ export default function SamplesDrawer() {
             <SidebarButton href="#sample/respond-to-message">Respond to inquiry</SidebarButton>
           </Stack>
 
-          <Divider />
 
-          <Stack>
-            <Button size="small" href="https://www.usewaypoint.com/open-source/emailbuilderjs" target="_blank">
-              Learn more
-            </Button>
-            <Button size="small" href="https://github.com/usewaypoint/email-builder-js" target="_blank">
-              View on GitHub
-            </Button>
-          </Stack>
+
         </Stack>
-        <Stack spacing={2} px={0.75} py={3}>
-          <Link href="https://usewaypoint.com?utm_source=emailbuilderjs" target="_blank" sx={{ lineHeight: 1 }}>
-            <Box component="img" src={logo} width={32} />
-          </Link>
-          <Box>
-            <Typography variant="overline" gutterBottom>
-              Looking to send emails?
-            </Typography>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              Waypoint is an end-to-end email API with a &apos;pro&apos; version of this template builder with dynamic
-              variables, loops, conditionals, drag and drop, layouts, and more.
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ justifyContent: 'center' }}
-            href="https://usewaypoint.com?utm_source=emailbuilderjs"
-            target="_blank"
-          >
-            Learn more
-          </Button>
-        </Stack>
+
       </Stack>
     </Drawer>
   );

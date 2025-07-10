@@ -7,7 +7,9 @@ import getConfiguration from '../../getConfiguration';
 
 export default function SidebarButton({ href, children }: { href: string; children: React.ReactNode | string }) {
   const handleClick = () => {
+
     resetDocument(getConfiguration(href));
+    window.location.hash = href;
   };
   return (
     <Button size="small" href={href} onClick={handleClick}>

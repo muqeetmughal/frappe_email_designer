@@ -1,3 +1,4 @@
+import { useFrappeGetDoc } from 'frappe-react-sdk';
 import EMPTY_EMAIL_MESSAGE from './sample/empty-email-message';
 import ONE_TIME_PASSCODE from './sample/one-time-passcode';
 import ORDER_ECOMMERCE from './sample/order-ecommerce';
@@ -9,7 +10,18 @@ import SUBSCRIPTION_RECEIPT from './sample/subscription-receipt';
 import WELCOME from './sample/welcome';
 
 export default function getConfiguration(template: string) {
-  if (template.startsWith('#sample/')) {
+
+
+
+
+  if (template.startsWith('#design/')) {
+
+    // console.log("Changes: ", template)
+
+    return EMPTY_EMAIL_MESSAGE
+
+
+  }else if (template.startsWith('#sample/')) {
     const sampleName = template.replace('#sample/', '');
     switch (sampleName) {
       case 'welcome':
