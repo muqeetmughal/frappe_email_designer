@@ -13,11 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@usewaypoint/email-builder": "^0.0.8",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "zod": "^3.25.74"
-    
+  "dependencies": {  
   }
 }
