@@ -11,9 +11,6 @@
     "copy-html-entry": "cp ../email_designer/public/mail_designer/index.html ../email_designer/www/mail_designer.html"
   },
   "dependencies": {
-    "frappe-react-sdk": "^1.11.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.10",
@@ -30,10 +27,14 @@
     "@usewaypoint/block-text": "^0.0.6",
     "@usewaypoint/document-core": "^0.0.6",
     "@usewaypoint/email-builder": "^0.0.8",
-     "highlight.js": "^11.9.0",
-     "prettier": "^3.2.5",
-     "react-colorful": "^5.6.1",
-     "zod": "^3.22.4",
+    "frappe-react-sdk": "^1.11.0",
+    "highlight.js": "^11.9.0",
+    "prettier": "^3.2.5",
+    "react": "^19.1.0",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.7.1",
+    "zod": "^3.22.4",
     "zustand": "^4.5.1"
   },
   "devDependencies": {

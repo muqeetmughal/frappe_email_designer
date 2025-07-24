@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Stack, useTheme } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import { useInspectorDrawerOpen, useSamplesDrawerOpen } from '../documents/editor/EditorContext';
 
@@ -8,6 +9,11 @@ import InspectorDrawer, { INSPECTOR_DRAWER_WIDTH } from './InspectorDrawer';
 import SamplesDrawer, { SAMPLES_DRAWER_WIDTH } from './SamplesDrawer';
 import TemplatePanel from './TemplatePanel';
 import { FrappeProvider } from 'frappe-react-sdk';
+import MainLayout from '../components/layouts/MainLayout';
+import TemplatesList from '../pages/TemplatesList';
+import EditorLayout from '../components/layouts/EditorLayout';
+import SamplesList from '../pages/SamplesList';
+import GenerateTemplate from '../pages/GenerateTemplate';
 
 function useDrawerTransition(cssProperty: 'margin-left' | 'margin-right', open: boolean) {
   const { transitions } = useTheme();
@@ -18,17 +24,13 @@ function useDrawerTransition(cssProperty: 'margin-left' | 'margin-right', open: 
 }
 
 export default function App() {
-  const inspectorDrawerOpen = useInspectorDrawerOpen();
-  const samplesDrawerOpen = useSamplesDrawerOpen();
-
-  const marginLeftTransition = useDrawerTransition('margin-left', samplesDrawerOpen);
-  const marginRightTransition = useDrawerTransition('margin-right', inspectorDrawerOpen);
 
   return (
     <>
       <FrappeProvider>
+        <Router basename='/mail_designer'>
 
-        <InspectorDrawer />
+          {/* <InspectorDrawer />
         <SamplesDrawer />
 
         <Stack
@@ -39,7 +41,25 @@ export default function App() {
           }}
         >
           <TemplatePanel />
-        </Stack>
+        </Stack> */}
+
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="" element={<TemplatesList />} />
+               <Route path="generate" element={<GenerateTemplate />} />
+
+               
+              <Route element={<EditorLayout />}>
+                <Route path="/templates/:template_name" element={<TemplatePanel />} />
+              </Route>
+               <Route element={<EditorLayout />}>
+                <Route path="/samples/:sample_name" element={<TemplatePanel />} />
+              </Route>
+
+            </Route>
+          </Routes>
+        </Router>
+
       </FrappeProvider>
     </>
   );

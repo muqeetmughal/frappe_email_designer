@@ -26,8 +26,20 @@ import ShareButton from './ShareButton';
 
 import { useFrappeCreateDoc, useFrappeDeleteDoc, useFrappeGetDoc, useFrappePutCall, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import type { EmailTemplate } from '../../types';
+import { useNavigate, useParams } from 'react-router-dom';
+import WELCOME from '../../getConfiguration/sample/welcome';
+import ONE_TIME_PASSCODE from '../../getConfiguration/sample/one-time-passcode';
+import ORDER_ECOMMERCE from '../../getConfiguration/sample/order-ecommerce';
+import POST_METRICS_REPORT from '../../getConfiguration/sample/post-metrics-report';
+import RESERVATION_REMINDER from '../../getConfiguration/sample/reservation-reminder';
+import RESET_PASSWORD from '../../getConfiguration/sample/reset-password';
+import RESPOND_TO_MESSAGE from '../../getConfiguration/sample/respond-to-message';
+import SUBSCRIPTION_RECEIPT from '../../getConfiguration/sample/subscription-receipt';
+import EMPTY_EMAIL_MESSAGE from '../../getConfiguration/sample/empty-email-message';
 
 export default function TemplatePanel() {
+  const params = useParams()
+  const navigate = useNavigate()
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
@@ -37,21 +49,17 @@ export default function TemplatePanel() {
   const delete_doc = useFrappeDeleteDoc()
 
   // Get design name from URL hash
-  const designNameFromRoute = useMemo(() => {
-    const route = window.location.hash;
-    if (route.startsWith('#design/')) {
-      return decodeURIComponent(route.replace('#design/', ''));
-    }
-    return undefined;
-  }, [window.location.hash]);
+  // const designNameFromRoute = useMemo(() => {
+  //   const route = window.location.hash;
+  //   if (route.startsWith('#design/')) {
+  //     return decodeURIComponent(route.replace('#design/', ''));
+  //   }
+  //   return undefined;
+  // }, [window.location.hash]);
+  const designNameFromRoute = params.template_name || '';
+  const sampleDesignName = params?.sample_name || ''
 
-  const sampleDesign = useMemo(() => {
-    const route = window.location.hash;
-    if (route.startsWith('#sample/')) {
-      return decodeURIComponent(route.replace('#sample/', ''));
-    }
-    return undefined;
-  }, [window.location.hash]);
+
   console.log('designNameFromRoute', designNameFromRoute);
 
   const {
@@ -64,12 +72,38 @@ export default function TemplatePanel() {
   // Parse document content once when available
   const parsedDesign = useMemo(() => {
     try {
-      return designData?.custom_design ? JSON.parse(designData.custom_design as string) : null;
+      if (sampleDesignName) {
+        switch (sampleDesignName) {
+           case 'new':
+            return EMPTY_EMAIL_MESSAGE;
+          case 'welcome':
+            return WELCOME;
+          case 'one-time-password':
+            return ONE_TIME_PASSCODE;
+          case 'order-ecomerce':
+            return ORDER_ECOMMERCE;
+          case 'post-metrics-report':
+            return POST_METRICS_REPORT;
+          case 'reservation-reminder':
+            return RESERVATION_REMINDER;
+          case 'reset-password':
+            return RESET_PASSWORD;
+          case 'respond-to-message':
+            return RESPOND_TO_MESSAGE;
+          case 'subscription-receipt':
+            return SUBSCRIPTION_RECEIPT;
+        }
+
+      } else if (designData?.custom_design) {
+        return JSON.parse(designData.custom_design as string);
+      } else {
+        return EMPTY_EMAIL_MESSAGE
+      }
     } catch (e) {
       console.error('Error parsing design JSON:', e);
       return null;
     }
-  }, [designData?.custom_design]);
+  }, [designData?.custom_design, sampleDesignName]);
 
   // Update document context when parsed design is loaded
   useEffect(() => {
@@ -162,7 +196,7 @@ export default function TemplatePanel() {
                       'Email Template',
                       designNameFromRoute
                     ).then(() => {
-                      window.location.hash = '#';
+                      navigate(`/templates`)
 
                     });
                   }}
@@ -202,7 +236,7 @@ export default function TemplatePanel() {
                   }}
                 >
                   {
-                    update_design.loading ? `Saving..` : 'Save Design'
+                    update_doc_mutation.loading ? `Saving..` : 'Save Design'
                   }
 
                 </button>
@@ -211,7 +245,7 @@ export default function TemplatePanel() {
 
 
             {
-              sampleDesign && (
+              sampleDesignName && (
                 <button
                   style={{
                     padding: '6px 16px',
@@ -229,16 +263,19 @@ export default function TemplatePanel() {
 
                       'Email Template',
                       {
-                        name: sampleDesign,
-                        subject: sampleDesign,
+                        name: sampleDesignName,
+                        subject: sampleDesignName,
                         custom_design: JSON.stringify(document || {}),
+                        use_html: 1,
+                        response_html: renderToStaticMarkup(document, { rootBlockId: 'root' })
                       }
 
                     ).then((response) => {
                       console.log('response', response);
                       // updateDocumentContext()
 
-                      window.location.hash = `#design/${response?.name}`;
+                      // window.location.hash = `#design/${response?.name}`;
+                      navigate(`/templates/${response?.name}`)
                     });
                   }}
                 >
