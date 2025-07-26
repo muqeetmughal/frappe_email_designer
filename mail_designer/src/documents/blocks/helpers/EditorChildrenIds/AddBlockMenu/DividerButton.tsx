@@ -37,27 +37,30 @@ export default function DividerButton({ buttonElement, onClick }: Props) {
   return (
     <Fade in={visible}>
       <IconButton
-        size="small"
-        sx={{
-          p: 0.12,
-          position: 'absolute',
-          top: '-12px',
-          left: '50%',
-          transform: 'translateX(-10px)',
-          bgcolor: 'brand.blue',
-          color: 'primary.contrastText',
-          zIndex: 'fab',
-          '&:hover, &:active, &:focus': {
-            bgcolor: 'brand.blue',
-            color: 'primary.contrastText',
-          },
-        }}
-        onClick={(ev) => {
-          ev.stopPropagation();
-          onClick();
-        }}
+      size="small"
+      sx={{
+        p: 0.12,
+        position: 'absolute',
+        top: '-12px',
+        left: '50%',
+        transform: 'translateX(-10px)',
+        bgcolor: (theme) =>
+        theme.palette.mode === 'light' ? 'grey.900' : 'brand.blue',
+        color: 'primary.contrastText',
+        zIndex: 'fab',
+        boxShadow: 2,
+        '&:hover, &:active, &:focus': {
+        bgcolor: (theme) =>
+          theme.palette.mode === 'light' ? 'grey.800' : 'brand.blue',
+        color: 'primary.contrastText',
+        },
+      }}
+      onClick={(ev) => {
+        ev.stopPropagation();
+        onClick();
+      }}
       >
-        <AddOutlined fontSize="small" />
+      <AddOutlined fontSize="small" />
       </IconButton>
     </Fade>
   );

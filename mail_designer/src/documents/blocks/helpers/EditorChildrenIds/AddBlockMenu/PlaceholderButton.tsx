@@ -19,15 +19,15 @@ export default function PlaceholderButton({ onClick }: Props) {
         justifyContent: 'center',
         height: 48,
         width: '100%',
-        bgcolor: 'rgba(0,0,0, 0.05)',
+        bgcolor: 'rgba(0,0,0, 0.08)', // slightly darker for visibility
       }}
     >
       <AddOutlined
         sx={{
           p: 0.12,
-          bgcolor: 'brand.blue',
+          bgcolor: 'primary.main', // use theme primary for better contrast
           borderRadius: 24,
-          color: 'primary.contrastText',
+          color: 'background.paper', // ensures icon is visible on light bg
         }}
         fontSize="small"
       />
