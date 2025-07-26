@@ -1,41 +1,96 @@
 import { useFrappeGetDocList } from 'frappe-react-sdk';
 import type { EmailTemplate } from '../types';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardActionArea,
+  Stack,
+  Divider,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
+const sampleTemplates = [
+  { label: 'New Template', to: '/samples/new' },
+  { label: 'Welcome email', to: '/samples/welcome' },
+  { label: 'One-time passcode (OTP)', to: '/samples/one-time-password' },
+  { label: 'Reset password', to: '/samples/reset-password' },
+  { label: 'E-commerce receipt', to: '/samples/order-ecomerce' },
+  { label: 'Subscription receipt', to: '/samples/subscription-receipt' },
+  { label: 'Reservation reminder', to: '/samples/reservation-reminder' },
+  { label: 'Post metrics', to: '/samples/post-metrics-report' },
+  { label: 'Respond to inquiry', to: '/samples/respond-to-message' },
+];
 
 const TemplatesList = () => {
   const email_templates_query = useFrappeGetDocList<EmailTemplate>('Email Template', {
-    fields: ["*"],
+    fields: ['*'],
   });
   const email_templates = email_templates_query?.data || [];
 
   return (
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Sample Templates
+      </Typography>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        {sampleTemplates.map((sample, idx) => (
+          <Grid item xs={12} sm={6} md={4} key={sample.to}>
+        <Card
+          elevation={idx === 0 ? 4 : 2}
+          sx={{
+            border: idx === 0 ? '2px solid #1976d2' : '1px solid #e0e0e0',
+            background: idx === 0 ? '#e3f2fd' : 'background.paper',
+            transition: 'box-shadow 0.2s',
+          }}
+        >
+          <CardActionArea
+            component={RouterLink}
+            to={sample.to}
+            sx={{ height: '100%' }}
+          >
+            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {idx === 0 && <AddIcon color="primary" />}
+          <Typography
+            variant={idx === 0 ? 'h6' : 'body1'}
+            color={idx === 0 ? 'primary' : 'text.primary'}
+          >
+            {sample.label}
+          </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Divider sx={{ my: 4 }} />
+      <Typography variant="h4" gutterBottom>
+        Email Templates
+      </Typography>
+      <Grid container spacing={3}>
+        {email_templates.map((email_template) => (
+          <Grid item xs={12} sm={6} md={4} key={email_template.name}>
+            <Card elevation={3}>
+              <CardActionArea component={RouterLink} to={`/templates/${email_template.name}`}>
+                <CardContent>
+                  <Typography variant="h6" component="div" gutterBottom>
+                    {email_template.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {email_template.subject}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
 
-    <>
-    <h2>Sample Templates</h2>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <Link to="/samples/new">New Template</Link>
-      <Link to="/samples/welcome">Welcome email</Link>
-      <Link to="/samples/one-time-password">One-time passcode (OTP)</Link>
-      <Link to="/samples/reset-password">Reset password</Link>
-      <Link to="/samples/order-ecomerce">E-commerce receipt</Link>
-      <Link to="/samples/subscription-receipt">Subscription receipt</Link>
-      <Link to="/samples/reservation-reminder">Reservation reminder</Link>
-      <Link to="/samples/post-metrics-report">Post metrics</Link>
-      <Link to="/samples/respond-to-message">Respond to inquiry</Link>
-    </div>
-    <h2>Email Templates</h2>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
-      {email_templates.map((email_template) => (
-        <div key={email_template.name} style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px', background: '#fff' }}>
-          <Link to={'/templates/' + email_template.name} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h3>{email_template.name}</h3>
-            <p>{email_template.subject}</p>
-          </Link>
-        </div>
-      ))}
-    </div>
-    </>
-  )
-}
-
-export default TemplatesList
+export default TemplatesList;

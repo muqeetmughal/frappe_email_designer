@@ -179,111 +179,123 @@ export default function TemplatePanel() {
           <Box>
             {
               designNameFromRoute && (
-                <button
-                  style={{
-                    padding: '6px 16px',
-                    background: 'red',
-                    color: '#ffff',
-                    border: 'none',
-                    borderRadius: 4,
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    fontSize: 14,
-                  }}
-                  onClick={() => {
-                    if (!designNameFromRoute) return;
-                    delete_doc.deleteDoc(
-                      'Email Template',
-                      designNameFromRoute
-                    ).then(() => {
-                      navigate(`/templates`)
-
-                    });
-                  }}
-                >
-                  {
-                    delete_doc.loading ? `Deleting..` : 'Delete Design'
-                  }
-
-                </button>
+                <Box sx={{ display: 'inline-block', ml: 1 }}>
+                  <Tooltip title="Delete this design">
+                    <ToggleButton
+                      value="delete"
+                      size="small"
+                      color="error"
+                      sx={{
+                        px: 2,
+                        fontWeight: 500,
+                        fontSize: 14,
+                        borderRadius: 2,
+                        boxShadow: 1,
+                        textTransform: 'none',
+                        bgcolor: 'error.main',
+                        color: 'error.contrastText',
+                        '&:hover': {
+                          bgcolor: 'error.dark',
+                        },
+                        minHeight: 36,
+                      }}
+                      disabled={delete_doc.loading}
+                      onClick={() => {
+                        if (!designNameFromRoute) return;
+                        delete_doc.deleteDoc('Email Template', designNameFromRoute).then(() => {
+                          navigate(`/`);
+                        });
+                      }}
+                    >
+                      {delete_doc.loading ? 'Deleting...' : 'Delete Design'}
+                    </ToggleButton>
+                  </Tooltip>
+                </Box>
               )
             }
             {
               designNameFromRoute && (
-                <button
-                  style={{
-                    padding: '6px 16px',
-                    background: '#1976d2',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 4,
-                    cursor: 'pointer',
+                <Box sx={{ display: 'inline-block', ml: 1 }}>
+                  <Tooltip title="Save changes to this design">
+                  <ToggleButton
+                    value="save"
+                    size="small"
+                    color="primary"
+                    sx={{
+                    px: 2,
                     fontWeight: 500,
                     fontSize: 14,
-                  }}
-                  onClick={() => {
-                    // if (!designNameFromRoute) return;
-
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    textTransform: 'none',
+                    bgcolor: 'primary.main',
+                    color: 'primary.contrastText',
+                    '&:hover': {
+                      bgcolor: 'primary.dark',
+                    },
+                    minHeight: 36,
+                    }}
+                    disabled={update_doc_mutation.loading}
+                    onClick={() => {
                     update_doc_mutation.updateDoc('Email Template', designNameFromRoute, {
                       custom_design: JSON.stringify(document || {}),
                       use_html: 1,
                       response_html: renderToStaticMarkup(document, { rootBlockId: 'root' })
-
                     }).then(() => {
                       updateDocumentContext()
-
                     });
-                  }}
-                >
-                  {
-                    update_doc_mutation.loading ? `Saving..` : 'Save Design'
-                  }
-
-                </button>
+                    }}
+                  >
+                    {update_doc_mutation.loading ? 'Saving...' : 'Save Design'}
+                  </ToggleButton>
+                  </Tooltip>
+                </Box>
               )
             }
 
 
             {
               sampleDesignName && (
-                <button
-                  style={{
-                    padding: '6px 16px',
-                    background: '#1976d2',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 4,
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    fontSize: 14,
-                  }}
-                  onClick={() => {
-
-                    create_mutation.createDoc(
-
-                      'Email Template',
-                      {
-                        name: sampleDesignName,
-                        subject: sampleDesignName,
-                        custom_design: JSON.stringify(document || {}),
-                        use_html: 1,
-                        response_html: renderToStaticMarkup(document, { rootBlockId: 'root' })
-                      }
-
-                    ).then((response) => {
-                      console.log('response', response);
-                      // updateDocumentContext()
-
-                      // window.location.hash = `#design/${response?.name}`;
-                      navigate(`/templates/${response?.name}`)
-                    });
-                  }}
-                >
-                  {
-                    update_design.loading ? `Copying..` : 'Copy Design'
-                  }
-
-                </button>
+                <Box sx={{ display: 'inline-block', ml: 1 }}>
+                  <Tooltip title="Copy this sample as a new design">
+                    <ToggleButton
+                      value="copy"
+                      size="small"
+                      color="primary"
+                      sx={{
+                        px: 2,
+                        fontWeight: 500,
+                        fontSize: 14,
+                        borderRadius: 2,
+                        boxShadow: 1,
+                        textTransform: 'none',
+                        bgcolor: 'primary.main',
+                        color: 'primary.contrastText',
+                        '&:hover': {
+                          bgcolor: 'primary.dark',
+                        },
+                        minHeight: 36,
+                      }}
+                      disabled={create_mutation.loading}
+                      onClick={() => {
+                        create_mutation.createDoc(
+                          'Email Template',
+                          {
+                            name: sampleDesignName,
+                            subject: sampleDesignName,
+                            custom_design: JSON.stringify(document || {}),
+                            use_html: 1,
+                            response_html: renderToStaticMarkup(document, { rootBlockId: 'root' })
+                          }
+                        ).then((response) => {
+                          navigate(`/templates/${response?.name}`)
+                        });
+                      }}
+                    >
+                      {create_mutation.loading ? 'Copying...' : 'Copy Design'}
+                    </ToggleButton>
+                  </Tooltip>
+                </Box>
               )
 
             }
